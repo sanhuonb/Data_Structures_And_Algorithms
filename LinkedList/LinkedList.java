@@ -280,6 +280,13 @@ public class LinkedList {
         return r;
     }
 
+    /**
+     * 合并两个有序链表，返回有序链表
+     *
+     * @param link1
+     * @param link2
+     * @return 合并后的有序链表
+     */
     public static LinkedList mergeOrderedLinkedList(LinkedList link1, LinkedList link2) {
         LinkedList result = new LinkedList();
         Node node1 = link1.head;
@@ -293,11 +300,11 @@ public class LinkedList {
                 node2 = node2.next;
             }
         }
-        while (node1 != null){
+        while (node1 != null) {
             result.insertToTail(node1.data); // 调用形参为 int 类型的插入函数，可以避免内存地址引用错误
             node1 = node1.next;
         }
-        while (node2 != null){
+        while (node2 != null) {
             result.insertToTail(node2.data);
             node2 = node2.next;
         }
@@ -327,6 +334,99 @@ public class LinkedList {
     }
 
     /**
+     * 删除倒数第 n 个节点，参数 n 由传入的值决定，当删除错误时返回 -1
+     * 程序会判断链表是否为空，链表为空则提示错误返回 -1。当链表只有一个节点但是删除的位置不是 1 的话也会提示传入参数错误。
+     *
+     * @param index
+     * @return 删除元素的值
+     */
+    public static int MydeleteLastKth(LinkedList list, int index) {
+        int result;
+        if (list.head == null) {
+            System.out.println("链表为空");
+            return -1;
+        }
+        if (list.head.next == null) {
+            if (index == 1) {
+                result = list.head.data;
+                list.head = null;
+                return result;
+            } else {
+                System.out.println("输入删除的位置有误! ");
+                return -1;
+            }
+        }
+        Node p = list.head;
+        Node q = list.head;
+        int count = 0, deleteIndex = 0; // 计算链表数据个数
+        while (p != null) {
+            count++;
+            p = p.next;
+        }
+        p = null;
+        deleteIndex = count - index;
+        for (int i = 1; i < deleteIndex; i++) {
+            q = q.next;
+        }
+        Node temp = q.next;
+        result = temp.data;
+        q.next = q.next.next;
+        temp = null;
+        return result;
+    }
+
+    /**
+     * 删除倒数第 n 个节点，更优的代码，具体理论查资料
+     *
+     * @param list
+     * @param k
+     * @return
+     */
+    public static LinkedList deleteLastKth(LinkedList list, int k) {
+        Node fast = list.head;
+        int i = 1;
+        while (fast != null && i < k) {
+            fast = fast.next;
+            i++;
+        }
+        if (fast == null) { // 两种情况，一种链表为空，一种删除的位置在链表之外
+            return list;
+        }
+        Node slow = list.head;
+        Node pre = null;
+        while (fast.next != null) {
+            fast = fast.next;
+            pre = slow;
+            slow = slow.next;
+
+        }
+        if (pre == null) {
+            list.head = list.head.next; // 如果删除的节点恰好是正数第一个节点
+        } else {
+            pre.next = pre.next.next;
+        }
+        return list;
+    }
+
+    /**
+     * 寻找中间节点
+     *
+     * @param list
+     * @return
+     */
+    public static Node findMiddleNode(LinkedList list) {
+        if (list.head == null)
+            return null;
+        Node fast = list.head;
+        Node slow = list.head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    /**
      * 传入一个链表，检测是否是中环
      *
      * @param p
@@ -348,20 +448,14 @@ public class LinkedList {
     }
 
     public static void main(String[] args) {
-        LinkedList link1 = new LinkedList();
-        LinkedList link2 = new LinkedList();
-        int data[] = {1, 2, 3, 4};
-        int data2[] = {3, 4, 5, 6};
+        LinkedList list = new LinkedList();
+        int data[] = {1, 2, 3, 4, 5};
         for (int i = 0; i < data.length; i++) {
-            link1.insertToTail(data[i]);
+            list.insertToTail(data[i]);
         }
-        for (int i = 0; i < data2.length; i++) {
-            link2.insertToTail(data2[i]);
-        }
-        link1.printAll();
-        link2.printAll();
-
-        LinkedList result = mergeOrderedLinkedList(link1, link2);
-        result.printAll();
+        list.printAll();
+        System.out.println("-------------");
+        Node temp = findMiddleNode(list);
+        System.out.println(temp.data);
     }
 }
