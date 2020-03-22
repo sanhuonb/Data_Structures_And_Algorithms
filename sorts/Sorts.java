@@ -3,7 +3,7 @@ package com.jy.sorts;
 public class Sorts {
     public static void main(String[] args) {
         int[] temp = {2, 1, 4, 5, 9, 8, 6, 7, 3};
-        selectionSort(temp);
+        shellSort(temp);
         for (int i : temp){
             System.out.println(i + " ");
         }
@@ -26,6 +26,52 @@ public class Sorts {
             }
         }
     }
+
+
+
+    /**
+     * 希尔排序
+     * @param a
+     */
+    public static void shellSort(int[] a){
+        int n = a.length;
+        if (n <= 1) return;
+        int step = n / 2;
+        while (step >= 1){
+            for (int i = step; i < n; i++){
+                int value = a[i];
+                int j = i - step;
+                for (; j >= 0; j = j - step){
+                    if (a[j] > value){
+                        a[j + step] = a[j];
+                    } else {
+                        break;
+                    }
+                }
+                a[j + step] = value;
+            }
+            step = step / 2;
+        }
+    }
+
+    /**
+     * 向下冒泡法，即每次遍历把未排序中最小的数放到前面
+     * @param a
+     */
+    public static void bubbleDownSort(int[] a){
+        int n = a.length;
+        if (n <= 1) return;
+        for (int i = 0; i < n - 1; i++){
+            for (int j = i + 1; j < n; j++){
+                if (a[j] < a[i]){
+                    int temp = a[i];
+                    a[i] = a[j];
+                    a[j] = temp;
+                }
+            }
+        }
+    }
+
 
     /**
      * 冒泡排序改进：在每一轮排序后记录最后一次元素交换的位置，作为下次比较的边界，边界外的元素无需比较
@@ -52,6 +98,8 @@ public class Sorts {
         }
     }
 
+
+
     /**
      * 插入排序，a 代表数组
      * @param a
@@ -73,6 +121,8 @@ public class Sorts {
             a[j + 1] = value;
         }
     }
+
+
 
     /**
      * 选择排序
